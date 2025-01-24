@@ -25,17 +25,17 @@ git push -uf origin main
 To dynamically work on your repository in a group, you first must do the following:
 
 ```
-git remote add upstream https://gitlab.com/MatkoCausic/bazaarbuddy.git
+git remote add main https://gitlab.com/MatkoCausic/bazaarbuddy.git
 ```
 
 To put your work on the repository dynamically, use:
 
 ```
-git merge upstream/main
+git merge main
 ```
 
 To get the project with someone else's work, use:
 
 ```
-git fetch upstream/main
+git fetch main
 ```
