@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 import uuid
+from django.core.validators import MinValueValidator, MaxValueValidator
+from models import Rating
 
 
 class Role(models.Model):
@@ -15,3 +17,38 @@ class User(models.Model):
     email = models.CharField(max_length=50)
     roleId = models.ForeignKey(Role, on_delete=models.CASCADE) 
     
+class Product(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=50)
+    description = models.TextField(max_length=256)
+    category = models.ForeignKey(Category)
+    price = models.DecimalField(decimal_places=2, default=0)
+    class Condition(models.TextChoices):
+        NEW = 'New', 'New'
+        LIKE_NEW = 'Like New', 'Like New'
+        USED = 'Used', 'Used'
+        DAMAGED = 'Damaged', 'Damaged'
+    condition = models.CharField(
+        max_length=20,
+        choices=Condition.choices,
+        default=Condition.NEW
+    )
+    userId = models.ForeignKey(User)
+    rating = models.ForeignKey(Rating)
+    date_ceated = models.DateTimeField(auto_now_add=True)
+    date_updated = models.DateTimeField(auto_now_add=True)
+    
+class Rating(models.Model):
+    userId = models.ForeignKey(User, on_delete=models.CASCADE)
+    productId = models.ForeignKey(Product, on_delete=models.CASCADE)
+    id = models.URLField(default=uuid.uuid4)
+    grade = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    
+class Category(models.Model):
+    id = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=128)
+    
+
+
+
+
