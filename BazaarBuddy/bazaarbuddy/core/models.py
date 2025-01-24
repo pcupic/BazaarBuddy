@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 import uuid
 from django.core.validators import MinValueValidator, MaxValueValidator
-from models import Rating, Rating
+from models import Rating, Category
 
 
 class Role(models.Model):
