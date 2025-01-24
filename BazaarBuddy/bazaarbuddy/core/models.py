@@ -3,19 +3,17 @@ from django.contrib.auth.models import User
 import uuid
 from django.core.validators import MinValueValidator, MaxValueValidator
 from models import Rating, Category
-
-
-class Role(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=50, unique=True)
-    
     
 class User(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)
-    roleId = models.ForeignKey(Role, on_delete=models.CASCADE) 
+    email = models.CharField(max_length=50, unique=True)
+    class Role(models.TextChoices):
+        REGULAR = 'Regular', 'Regular'
+        MODERATOR = 'Moderator', 'Moderator'
+        ADMIN = 'Admin', 'Admin'
+    role = models.CharField(choices=Role.choices, default=Role.REGULAR) 
     
 class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
