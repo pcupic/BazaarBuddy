@@ -1,0 +1,65 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'accounts/register.css' %}">
+</head>
+<body>
+    <div class="register-container">
+        <h2 class="register-title">Create Your Account</h2>
+        <form method="POST" class="register-form">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="error-message">{{ form.email.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.first_name.label_tag }}
+                {{ form.first_name }}
+                {% if form.first_name.errors %}
+                    <div class="error-message">{{ form.first_name.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.last_name.label_tag }}
+                {{ form.last_name }}
+                {% if form.last_name.errors %}
+                    <div class="error-message">{{ form.last_name.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+                {% if form.password.errors %}
+                    <div class="error-message">{{ form.password.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.confirm_password.label_tag }}
+                {{ form.confirm_password }}
+                {% if form.confirm_password.errors %}
+                    <div class="error-message">{{ form.confirm_password.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.user_type.label_tag }}
+                <div class="select-wrapper">
+                    {{ form.user_type }}
+                </div>
+                {% if form.user_type.errors %}
+                    <div class="error-message">{{ form.user_type.errors }}</div>
+                {% endif %}
+            </div>            
+            <button type="submit" class="register-btn">Register</button>
+        </form>
+    </div>    
+</body>
+</html>
+
+
