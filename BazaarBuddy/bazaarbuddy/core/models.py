@@ -35,6 +35,7 @@ class Product(models.Model):
         choices=Condition.choices,
         default=Condition.NEW
     )
+    grade = models.DecimalField(decimal_places=1, max_digits=2)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_ceated = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
