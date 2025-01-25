@@ -4,8 +4,7 @@ from core import views
 
 
 urlpatterns = [
-    path('', views.home, name='homepage'),
-    path('products/', views.index, name='index'),
     path('admin/', admin.site.urls),
-    path('core/', include('core.urls'))
+    path('', include('core.urls')),
+    path('accounts/', include('accounts.urls')),
 ]
