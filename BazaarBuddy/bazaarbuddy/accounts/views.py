@@ -6,22 +6,25 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.urls import reverse
+from .models import UserProfile
 
 def register(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.username = form.cleaned_data['email']  
-            user.set_password(form.cleaned_data['password'])  
+            user.username = form.cleaned_data['email']
+            user.set_password(form.cleaned_data['password'])
             user.save()
+            
+            user_type = form.cleaned_data['user_type']
+            UserProfile.objects.create(user=user, user_type=user_type)
 
-            return redirect('accounts:login')  
+            return redirect('accounts:login')
     else:
         form = RegistrationForm()
 
     return render(request, 'accounts/register.html', {'form': form})
-
 
 def login(request):
     if request.method == 'POST':
