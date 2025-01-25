@@ -1,9 +1,9 @@
 from django.urls import path
-from django.contrib.auth.views import LoginView
-from .forms import LoginForm
+from . import views
 
 app_name = "core"
 
 urlpatterns = [
-    path('login/', LoginView.as_view(template_name='core/login.html', authentication_form=LoginForm), name='login'),
+    path('', views.home, name='homepage'),
+    path('products/', views.index, name='index'),
 ]
