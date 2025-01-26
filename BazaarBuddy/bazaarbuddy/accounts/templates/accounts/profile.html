@@ -1,0 +1,41 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="{% static 'accounts/profile.css' %}">
+</head>
+<body>
+  <form method="POST">
+    {% csrf_token %}
+    <h3>Uredi Profil</h3>
+    {{ user_form.as_p }}
+    <button type="submit" name="edit_profile">Spremi Promene</button>
+  </form>
+
+  <hr>
+
+  <form method="POST">
+    {% csrf_token %}
+    <h3>Promeni Lozinku</h3>
+    {{ password_form.as_p }}
+    <button type="submit" name="change_password">Promeni Lozinku</button>
+  </form>
+
+  <hr>
+
+  <form method="POST">
+    {% csrf_token %}
+    <button type="submit" name="logout" style="background-color: #f44336; color: white;">Logout</button>
+    <button type="submit" name="delete_profile" style="background-color: #f44336; color: white;">Obriši Moj Profil</button>
+  </form>
+
+  <p><strong>Username:</strong> {{ user.username }}</p>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+  <p><strong>First Name:</strong> {{ user.first_name }}</p>
+  <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+  <p><strong>User Type:</strong> {{ user.profile.get_user_type_display }}</p>
+</body>
+</html>

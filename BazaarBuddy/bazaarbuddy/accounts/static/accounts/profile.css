@@ -1,0 +1,84 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-container {
+    width: 80%;
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 30px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+h3 {
+    color: #555;
+}
+
+form {
+    margin: 20px 0;
+}
+
+form input, form select, form button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+form input:focus, form select:focus {
+    border-color: #4CAF50;
+    outline: none;
+}
+
+button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+button[type="submit"][name="logout"], 
+button[type="submit"][name="delete_profile"] {
+    background-color: #f44336;
+}
+
+button[type="submit"][name="logout"]:hover, 
+button[type="submit"][name="delete_profile"]:hover {
+    background-color: #e53935;
+}
+
+hr {
+    border: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+.profile-info {
+    margin: 20px 0;
+    font-size: 16px;
+}
+
+.profile-info p {
+    margin: 10px 0;
+}
+
+.profile-info strong {
+    color: #333;
+}
