@@ -1,30 +1,16 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Product, Category, ProductImage
+from .models import Product, Category
 
 class ProductForm(forms.ModelForm):
-    images = forms.CharField(
-        required = True,
-        widget = forms.Textarea(attrs={'placeholder': 'Add one URL per line', 'rows': 4}),
-        help_text = "Provide one or more image URLs, one per line."
-    )
-
     class Meta:
         model = Product
-        fields = ['title','description','category','price','condition']
+        fields = ['title', 'description', 'category', 'price', 'images', 'condition']
         widgets = {
             'category': forms.Select(attrs={'class': 'form-control'}),
             'condition': forms.Select(attrs={'class': 'form-control'}),
         }
-    
-    def clean_images(self):
-        """Validate the 'images' field to ensure it contains at least one valid URL."""
-        data = self.cleaned_data['images']
-        image_list = [url.strip() for url in data.splitlines() if url.strip()]
-        if not image_list:
-            raise forms.ValidationError("Please provide at least one image URL.")
-        return image_list
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
