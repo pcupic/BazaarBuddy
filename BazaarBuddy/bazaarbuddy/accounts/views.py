@@ -1,13 +1,13 @@
 from django.shortcuts import render, get_object_or_404 ,redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
-from .forms import RegistrationForm
-from django.contrib.auth.forms import AuthenticationForm
+from .forms import RegistrationForm, UserEditForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.urls import reverse
 from .models import UserProfile
-from django.contrib.auth import logout as auth_logout
+from django.contrib.auth import logout as auth_logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
 
@@ -64,16 +64,6 @@ def admin_dashboard(request):
 
     users = User.objects.filter(profile__user_type__in=['moderator', 'regular'])
     return render(request, 'accounts/admin_dashboard.html', {'users': users})
-
-from .forms import UserEditForm, PasswordChangeCustomForm
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
-from django.contrib import messages
-from django.shortcuts import render, redirect
-from django.contrib.auth import update_session_auth_hash, logout as auth_logout
-from .forms import UserEditForm  # Assuming you have a UserEditForm for updating user profile
-from django.contrib.auth.models import User
 
 @login_required
 def profile(request):
