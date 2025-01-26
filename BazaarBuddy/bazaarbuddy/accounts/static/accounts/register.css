@@ -1,0 +1,147 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f4f7fb; 
+    color: #333;  
+    height: 100vh;  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.register-container {
+    background: #fff;  
+    width: 100%;
+    max-width: 450px;  
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);  
+    border-radius: 8px;  
+    text-align: center;
+    transition: transform 0.3s ease;  
+}
+
+.register-container:hover {
+    transform: translateY(-5px);  
+}
+
+.register-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #4CAF50;  
+    margin-bottom: 30px;  
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;  
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #555;  
+    margin-bottom: 5px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    color: #333;
+    background-color: #fafafa;
+    outline: none;
+    transition: border-color 0.3s ease;  
+}
+
+input:focus {
+    border-color: #4CAF50;  
+    background-color: #fff;  
+}
+
+.select-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.select-wrapper select {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    color: #333;
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.select-wrapper select:focus {
+    border-color: #4CAF50;
+    background-color: #fff;
+}
+
+.select-wrapper::after {
+    content: none;  
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #4CAF50;
+    pointer-events: none;  
+}
+
+button.register-btn {
+    background-color: #4CAF50;  
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button.register-btn:hover {
+    background-color: #45a049;  
+}
+
+.error-message {
+    color: #ff4d4d; 
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+@media (max-width: 600px) {
+    .register-container {
+        padding: 30px; 
+    }
+
+    .register-title {
+        font-size: 24px;
+    }
+
+    .form-group input {
+        font-size: 14px;
+    }
+
+    button.register-btn {
+        padding: 12px;
+    }
+}
