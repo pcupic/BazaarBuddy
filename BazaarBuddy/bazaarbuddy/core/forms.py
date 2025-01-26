@@ -3,15 +3,6 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Product, Category
 
-class ProductForm(forms.ModelForm):
-    class Meta:
-        model = Product
-        fields = ['title', 'description', 'category', 'price', 'images', 'condition']
-        widgets = {
-            'category': forms.Select(attrs={'class': 'form-control'}),
-            'condition': forms.Select(attrs={'class': 'form-control'}),
-        }
-
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder': 'Your username',

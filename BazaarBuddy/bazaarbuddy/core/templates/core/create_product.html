@@ -4,9 +4,8 @@
 
 {% block content %}
 <div>
-    <form method="post" action="{% url 'create_product' %}">
+    <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
         <button type="submit">Create Product</button>
     </form>
 </div>
