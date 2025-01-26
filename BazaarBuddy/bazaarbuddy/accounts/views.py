@@ -29,6 +29,7 @@ def register(request):
 
     return render(request, 'accounts/register.html', {'form': form})
 
+
 def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
@@ -36,16 +37,12 @@ def login(request):
             email = form.cleaned_data['username']
             password = form.cleaned_data['password']
             
-            try:
-                user = User.objects.get(email=email)
-                user = authenticate(request, username=user.username, password=password)
-                
-                if user is not None:
-                    auth_login(request, user)
-                    return HttpResponseRedirect(reverse('core:homepage')) 
-                else:
-                    messages.error(request, "Invalid email or password")
-            except User.DoesNotExist:
+            user = authenticate(request, username=email, password=password)
+            
+            if user is not None:
+                auth_login(request, user)
+                return HttpResponseRedirect(reverse('core:homepage')) 
+            else:
                 messages.error(request, "Invalid email or password")
         else:
             messages.error(request, "Invalid email or password")
@@ -70,38 +67,52 @@ def admin_dashboard(request):
 
 from .forms import UserEditForm, PasswordChangeCustomForm
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth import update_session_auth_hash, logout as auth_logout
+from .forms import UserEditForm  # Assuming you have a UserEditForm for updating user profile
+from django.contrib.auth.models import User
+
 @login_required
 def profile(request):
+    user_form = None 
+    password_form = None  
+
     if request.method == 'POST':
         if 'edit_profile' in request.POST:
             user_form = UserEditForm(request.POST, instance=request.user)
             if user_form.is_valid():
-                user_form.save()  
+                user = user_form.save(commit=False)
+                user.username = user.email 
+                user.save()
                 messages.success(request, "Profile is updated.")
                 return redirect('accounts:profile')  
+
+        elif 'change_password' in request.POST:
+            password_form = PasswordChangeForm(request.user, request.POST)
+            if password_form.is_valid():
+                password_form.save()
+                update_session_auth_hash(request, password_form.user) 
+                messages.success(request, "Your password has been changed.")
+                return redirect('accounts:profile') 
+
         elif 'logout' in request.POST:
             auth_logout(request)
             messages.success(request, "You have successfully logged out.")
             return redirect('accounts:login')  
+
         elif 'delete_profile' in request.POST:
             user = request.user
-            user.delete()  
+            user.delete()
             auth_logout(request)  
-            messages.success(request, "Your profile is deleted.")
-            return redirect('accounts:login')  
-        elif 'change_password' in request.POST:
-            password_form = PasswordChangeCustomForm(request.user, request.POST)
-            if password_form.is_valid():
-                password_form.save() 
-                messages.success(request, "Your password is changed.")
-                return redirect('accounts:profile')  
-        else:
-            user_form = UserEditForm(instance=request.user)
-            password_form = PasswordChangeCustomForm(request.user)
+            messages.success(request, "Your profile has been deleted.")
+            return redirect('accounts:login') 
 
     else:
         user_form = UserEditForm(instance=request.user)
-        password_form = PasswordChangeCustomForm(request.user)
+        password_form = PasswordChangeForm(request.user)
 
     return render(request, 'accounts/profile.html', {
         'user_form': user_form,
