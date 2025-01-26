@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 import uuid
 from django.core.validators import MinValueValidator, MaxValueValidator
     
@@ -18,6 +19,9 @@ class Category(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=128)
 
+    def __str__(self):
+        return self.name
+
 
 class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -25,6 +29,7 @@ class Product(models.Model):
     description = models.TextField(max_length=256)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(decimal_places=2,default=0,max_digits=6)
+    images = models.JSONField(default = list)
     class Condition(models.TextChoices):
         NEW = 'New', 'New'
         LIKE_NEW = 'Like New', 'Like New'
@@ -32,13 +37,15 @@ class Product(models.Model):
         DAMAGED = 'Damaged', 'Damaged'
     condition = models.CharField(
         max_length=20,
-        choices=Condition.choices,
-        default=Condition.NEW
+        choices=Condition.choices   
     )
-    grade = models.DecimalField(decimal_places=1, max_digits=2)
+    grade = models.DecimalField(decimal_places=1, max_digits=2,default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_ceated = models.DateTimeField(auto_now_add=True)
+    date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Rating(models.Model):
