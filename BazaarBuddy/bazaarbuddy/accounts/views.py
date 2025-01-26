@@ -7,7 +7,8 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.urls import reverse
 from .models import UserProfile
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth import logout as auth_logout
+from django.contrib.auth.decorators import login_required
 
 
 def register(request):
@@ -62,4 +63,42 @@ def admin_dashboard(request):
     users = User.objects.filter(profile__user_type__in=['moderator', 'regular'])
     return render(request, 'accounts/admin_dashboard.html', {'users': users})
 
-    
+from .forms import UserEditForm, PasswordChangeCustomForm
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        if 'edit_profile' in request.POST:
+            user_form = UserEditForm(request.POST, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()  
+                messages.success(request, "Profil je uspešno ažuriran.")
+                return redirect('accounts:profile')  
+        elif 'logout' in request.POST:
+            auth_logout(request)
+            messages.success(request, "Uspešno ste se odjavili.")
+            return redirect('accounts:login')  
+        elif 'delete_profile' in request.POST:
+            user = request.user
+            user.delete()  
+            auth_logout(request)  
+            messages.success(request, "Vaš profil je obrisan.")
+            return redirect('accounts:login')  
+        elif 'change_password' in request.POST:
+            password_form = PasswordChangeCustomForm(request.user, request.POST)
+            if password_form.is_valid():
+                password_form.save() 
+                messages.success(request, "Lozinka je uspešno promenjena.")
+                return redirect('accounts:profile')  
+        else:
+            user_form = UserEditForm(instance=request.user)
+            password_form = PasswordChangeCustomForm(request.user)
+
+    else:
+        user_form = UserEditForm(instance=request.user)
+        password_form = PasswordChangeCustomForm(request.user)
+
+    return render(request, 'accounts/profile.html', {
+        'user_form': user_form,
+        'password_form': password_form,
+    })
