@@ -33,6 +33,17 @@ class Product(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
 
+    class State(models.TextChoices):
+        PENDING = 'Pending', 'Pending'
+        ACCEPTED = 'Accepted', 'Accepted'
+        REJECTED = 'Rejected', 'Rejected'
+    
+    state = models.CharField(
+        max_length = 20,
+        choices = State.choices,
+        default = State.PENDING
+    )
+
     def __str__(self):
         return self.title
 
