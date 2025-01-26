@@ -3,6 +3,14 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Product, Category
 
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        exclude = ['user','state','date_created','date_updated', 'grade']
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4})
+        }
+
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder': 'Your username',
