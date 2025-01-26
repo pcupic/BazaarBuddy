@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 
 class RegistrationForm(forms.ModelForm):
     email = forms.EmailField(required=True)
@@ -39,6 +39,9 @@ class UserEditForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'email']  
 
 class PasswordChangeCustomForm(PasswordChangeForm):
-    old_password = forms.CharField(widget=forms.PasswordInput, required=True, label="Trenutna lozinka")
-    new_password1 = forms.CharField(widget=forms.PasswordInput, required=True, label="Nova lozinka")
-    new_password2 = forms.CharField(widget=forms.PasswordInput, required=True, label="Potvrdi novu lozinku")
+    old_password = forms.CharField(widget=forms.PasswordInput, required=True, label="Current password")
+    new_password1 = forms.CharField(widget=forms.PasswordInput, required=True, label="New password")
+    new_password2 = forms.CharField(widget=forms.PasswordInput, required=True, label="Confirm new password")
+    
+class EmailAuthenticationForm(AuthenticationForm):
+    username = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'autofocus': True}))

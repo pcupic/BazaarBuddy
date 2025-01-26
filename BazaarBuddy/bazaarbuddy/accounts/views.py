@@ -33,17 +33,22 @@ def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
-            username = form.cleaned_data['username']
+            email = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            user = authenticate(request, username=username, password=password)
             
-            if user is not None:
-                auth_login(request, user)
-                return HttpResponseRedirect(reverse('core:homepage')) 
-            else:
-                messages.error(request, "Invalid username or password")
+            try:
+                user = User.objects.get(email=email)
+                user = authenticate(request, username=user.username, password=password)
+                
+                if user is not None:
+                    auth_login(request, user)
+                    return HttpResponseRedirect(reverse('core:homepage')) 
+                else:
+                    messages.error(request, "Invalid email or password")
+            except User.DoesNotExist:
+                messages.error(request, "Invalid email or password")
         else:
-            messages.error(request, "Invalid username or password")
+            messages.error(request, "Invalid email or password")
     else:
         form = AuthenticationForm()
 
@@ -72,23 +77,23 @@ def profile(request):
             user_form = UserEditForm(request.POST, instance=request.user)
             if user_form.is_valid():
                 user_form.save()  
-                messages.success(request, "Profil je uspešno ažuriran.")
+                messages.success(request, "Profile is updated.")
                 return redirect('accounts:profile')  
         elif 'logout' in request.POST:
             auth_logout(request)
-            messages.success(request, "Uspešno ste se odjavili.")
+            messages.success(request, "You have successfully logged out.")
             return redirect('accounts:login')  
         elif 'delete_profile' in request.POST:
             user = request.user
             user.delete()  
             auth_logout(request)  
-            messages.success(request, "Vaš profil je obrisan.")
+            messages.success(request, "Your profile is deleted.")
             return redirect('accounts:login')  
         elif 'change_password' in request.POST:
             password_form = PasswordChangeCustomForm(request.user, request.POST)
             if password_form.is_valid():
                 password_form.save() 
-                messages.success(request, "Lozinka je uspešno promenjena.")
+                messages.success(request, "Your password is changed.")
                 return redirect('accounts:profile')  
         else:
             user_form = UserEditForm(instance=request.user)
