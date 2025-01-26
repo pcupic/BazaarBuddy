@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404 ,redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from .forms import RegistrationForm
@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate, login as auth_login
 from django.contrib import messages
 from django.urls import reverse
 from .models import UserProfile
+from django.contrib.auth.decorators import user_passes_test
+
 
 def register(request):
     if request.method == 'POST':
@@ -45,3 +47,19 @@ def login(request):
         form = AuthenticationForm()
 
     return render(request, 'accounts/login.html', {'form': form})
+
+def admin_dashboard(request):
+    if request.method == 'POST':  
+        user_id = request.POST.get('user_id') 
+        user = get_object_or_404(User, id=user_id)  
+        if not user.is_superuser:  
+            user.delete()
+            messages.success(request, f"User '{user.username}' has been deleted.")
+        else:
+            messages.error(request, "You cannot delete an admin.")
+        return redirect('accounts:admin_dashboard')
+
+    users = User.objects.filter(profile__user_type__in=['moderator', 'regular'])
+    return render(request, 'accounts/admin_dashboard.html', {'users': users})
+
+    
