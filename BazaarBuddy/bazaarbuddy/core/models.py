@@ -22,7 +22,7 @@ class Product(models.Model):
     description = models.TextField(max_length=256)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(decimal_places=2, default=0, max_digits=6)
-    image_url = models.URLField(default="https://example.com/default-image.jpg")
+    #image_url = models.URLField(default="https://example.com/default-image.jpg")
     class Condition(models.TextChoices):
         NEW = 'New', 'New'
         LIKE_NEW = 'Like New', 'Like New'
