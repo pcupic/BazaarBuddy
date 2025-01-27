@@ -3,9 +3,11 @@ from .forms import ProductForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
+@login_required
 def index(request):
     return render(request, 'core/index.html')
 
+@login_required
 def home(request):
     return render(request, 'core/home.html')
 
