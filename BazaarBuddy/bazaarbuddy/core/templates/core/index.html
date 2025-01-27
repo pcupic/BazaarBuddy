@@ -1,7 +1,22 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Index{% endblock %}
+{% block title %}Products{% endblock %}
 
 {% block content %}
-    <p>Hello, World! part 2</p>
+<div>
+    <h1>Accepted Products</h1>
+    <ul>
+        {% for product in products %}
+        <li>
+            <strong>{{ product.title }}</strong> -
+            Category: {{ product.category }} -
+            Price: ${{ product.price }} -
+            ID: {{ product.id }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% if not products %}
+    <p>No accepted products are avaliable...</p>
+    {% endif %}
+</div>
 {% endblock content %}

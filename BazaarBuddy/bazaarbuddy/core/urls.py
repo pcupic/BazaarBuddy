@@ -7,4 +7,5 @@ urlpatterns = [
     path('', views.home, name='homepage'),
     path('products/', views.index, name='index'),
     path('products/create/', views.create_product, name='create_product'),
+    path('product/<uuid:id>/', views.product_detail, name="product_detail"),
 ]

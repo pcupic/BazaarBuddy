@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Product Details{% endblock %}
+
+{% block content %}
+<div>
+    <h1>{{ product.title }}</h1>
+    <img src="{{ product.image_url }}" style="width: 250px;">
+    <p><strong>Description:</strong> {{ product.description }}</p>
+    <p><strong>Category:</strong> {{ product.category }}</p>
+    <p><strong>Condition:</strong> {{ product.condition }}</p>
+    <p><strong>Grade:</strong> {{ product.grade }}</p>
+    <p><strong>Price:</strong> ${{ product.price }}</p>
+    <p><strong>State:</strong> {{ product.state }}</p>
+    <p><strong>Created At:</strong> {{ product.date_created }}</p>
+    <p><strong>Updated At:</strong> {{ product.date_updated }}</p>
+</div>
+{% endblock %}
