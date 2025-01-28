@@ -3,11 +3,39 @@
 {% block title %}Products{% endblock %}
 
 {% block content %}
+<div class="p-4">
+    <form method="GET" class="mb-6 flex flex-wrap gap-4">
+        <select name="category" class="border p-2 rounded">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}" {% if request.GET.category == cat.id|stringformat:"s" %}selected{% endif %}>
+                {{ cat.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <select name="condition" class="border p-2 rounded">
+            <option value="">All Conditions</option>
+            <option value="new" {% if request.GET.condition == "new" %}selected{% endif %}>New</option>
+            <option value="used" {% if request.GET.condition == "used" %}selected{% endif %}>Used</option>
+        </select>
+
+        <select name="sort" class="border p-2 rounded">
+            <option value="">Sort by Price</option>
+            <option value="asc" {% if request.GET.sort == "asc" %}selected{% endif %}>Lowest to Highest</option>
+            <option value="desc" {% if request.GET.sort == "desc" %}selected{% endif %}>Highest to Lowest</option>
+        </select>
+
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Apply Filters</button>
+    </form>
+    </form>
+</div>
+
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
     {% for product in products %}
     <div class="border rounded-lg shadow-lg overflow-hidden">
         <a href="{% url 'core:product_detail' product.id %}">
-            <img src="{{ product.image_url }}" alt="{{ product.title }}" class="w-full h-48 object-cover">
+            <img src="{{ product.image_url }}" alt="{{ product.title }}" class="w-full h-48 object-cover", style="width: 250px;">
         </a>
         <div class="p-4">
             <a href="{% url 'core:product_detail' product.id %}" class="text-lg font-semibold text-blue-600 hover:underline">
@@ -16,30 +44,8 @@
             <p class="text-gray-700">{{ product.price }} €</p>
         </div>
     </div>
+    {% empty %}
+    <p class="text-gray-500">No products match your filters...</p>
     {% endfor %}
 </div>
 {% endblock %}
-
-
-<!-- {% extends 'core/base.html' %}
-
-{% block title %}Products{% endblock %}
-
-{% block content %}
-<div>
-    <h1>Accepted Products</h1>
-    <ul>
-        {% for product in products %}
-        <li>
-            <strong>{{ product.title }}</strong> -
-            Category: {{ product.category }} -
-            Price: ${{ product.price }} -
-            ID: {{ product.id }}
-        </li>
-        {% endfor %}
-    </ul>
-    {% if not products %}
-    <p>No accepted products are avaliable...</p>
-    {% endif %}
-</div>
-{% endblock content %} -->
