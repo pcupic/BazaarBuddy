@@ -16,8 +16,11 @@
 
         <select name="condition" class="border p-2 rounded">
             <option value="">All Conditions</option>
-            <option value="new" {% if request.GET.condition == "new" %}selected{% endif %}>New</option>
-            <option value="used" {% if request.GET.condition == "used" %}selected{% endif %}>Used</option>
+            {% for condition_value, condition_name in products.model.Condition.choices %}
+            <option value="{{ condition_value }}" {% if request.GET.condition == condition_value %}selected{% endif %}>
+                {{ condition_name }}
+            </option>
+            {% endfor %}
         </select>
 
         <select name="sort" class="border p-2 rounded">
@@ -27,7 +30,6 @@
         </select>
 
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Apply Filters</button>
-    </form>
     </form>
 </div>
 
