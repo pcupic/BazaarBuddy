@@ -11,6 +11,8 @@
 <body>
     <nav>
         <a href="{% url 'core:index' %}">Products</a> |
+        <a href="{% url 'core:create_product' %}">Post Product</a> |
+        <a href="{% url 'core:my_posted_products' %}">My Products</a> |
     </nav>
     {% block content %}
     {%  endblock %}

@@ -6,6 +6,16 @@ from django.contrib import messages
 from .models import Product,Category
 
 @login_required
+def my_posted_products(request):
+    products = Product.objects.filter(user = request.user, state__in = [Product.State.PENDING, Product.State.ACCEPTED])
+
+    context = {
+        'products': products
+    }
+
+    return render(request, 'core/my_posted_products.html', context)
+
+@login_required
 def index(request):
     products = Product.objects.filter(state=Product.State.ACCEPTED)
     categories = Category.objects.all()
