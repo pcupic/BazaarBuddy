@@ -51,20 +51,6 @@ def login(request):
 
     return render(request, 'accounts/login.html', {'form': form})
 
-def admin_dashboard(request):
-    if request.method == 'POST':  
-        user_id = request.POST.get('user_id') 
-        user = get_object_or_404(User, id=user_id)  
-        if not user.is_superuser:  
-            user.delete()
-            messages.success(request, f"User '{user.username}' has been deleted.")
-        else:
-            messages.error(request, "You cannot delete an admin.")
-        return redirect('accounts:admin_dashboard')
-
-    users = User.objects.filter(profile__user_type__in=['moderator', 'regular'])
-    return render(request, 'accounts/admin_dashboard.html', {'users': users})
-
 @login_required
 def profile(request):
     user_form = None 
