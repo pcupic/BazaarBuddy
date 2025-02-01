@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approve Moderators</title>
+</head>
+<body>
+    <h1>Approve or Reject Moderators</h1>
+    {% if pending_moderators %}
+        <table border="1">
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+            {% for profile in pending_moderators %}
+                <tr>
+                    <td>{{ profile.user.username }}</td>
+                    <td>{{ profile.user.email }}</td>
+                    <td>
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="user_id" value="{{ profile.id }}">
+                            <button type="submit" name="action" value="approve">Approve</button>
+                            <button type="submit" name="action" value="reject">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No moderators pending approval.</p>
+    {% endif %}
+</body>
+</html>

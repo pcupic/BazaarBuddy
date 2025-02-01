@@ -8,4 +8,6 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('profile/', views.profile, name='profile'),  
     path('moderator-dashboard/', views.moderator_dashboard, name="moderator_dashboard"),
+    path('approve-moderators/', views.approve_moderators, name='approve_moderators'),
+    path('waiting-for-approval/', views.waiting_for_approval, name='waiting_for_approval'),
 ]

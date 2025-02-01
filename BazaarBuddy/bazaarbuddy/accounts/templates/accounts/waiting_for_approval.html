@@ -1,0 +1,21 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Approval</title>
+    <link rel="stylesheet" href="{% static "accounts/waiting_for_approval.css" %}">
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h1>Your Moderator Account is Pending Approval</h1>
+            <p>Thank you for registering as a moderator. Your account is currently under review by the admin. Please check back later.</p>
+            <p>You can do everything a regular user can, but you will not be able to approve or reject products until your account is approved by the admin.</p>
+            <a href="/" class="button">Go to Home Page</a>
+        </div>
+    </div>
+</body>
+</html>

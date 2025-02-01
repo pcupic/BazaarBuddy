@@ -9,6 +9,7 @@ from django.urls import reverse
 from .models import UserProfile
 from django.contrib.auth import logout as auth_logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from core.models import Product
 
 def register(request):
@@ -19,9 +20,13 @@ def register(request):
             user.username = form.cleaned_data['email']
             user.set_password(form.cleaned_data['password'])
             user.save()
-            
+
             user_type = form.cleaned_data['user_type']
-            UserProfile.objects.create(user=user, user_type=user_type)
+            user_profile = UserProfile.objects.create(user=user, user_type=user_type)
+            
+            if user_type == 'moderator':
+                user_profile.approval_status = 'pending'
+                user_profile.save()
 
             return redirect('accounts:login')
     else:
@@ -29,6 +34,24 @@ def register(request):
 
     return render(request, 'accounts/register.html', {'form': form})
 
+@staff_member_required 
+def approve_moderators(request):
+    pending_moderators = UserProfile.objects.filter(user_type='moderator', approval_status='pending')
+
+    if request.method == 'POST':
+        user_id = request.POST.get("user_id")
+        action = request.POST.get("action")
+        user_profile = get_object_or_404(UserProfile, id=user_id)
+        
+        if action == 'approve':
+            user_profile.approval_status = 'approved'
+        elif action == 'reject':
+            user_profile.approval_status = 'rejected'
+        
+        user_profile.save()
+        return redirect('accounts:approve_moderators') 
+
+    return render(request, 'accounts/approve_moderators.html', {'pending_moderators': pending_moderators})
 
 def login(request):
     if request.method == 'POST':
@@ -41,7 +64,11 @@ def login(request):
             
             if user is not None:
                 auth_login(request, user)
-                return HttpResponseRedirect(reverse('core:homepage')) 
+
+                if user.profile.user_type == 'moderator' and user.profile.approval_status == 'pending':
+                    return redirect('accounts:waiting_for_approval') 
+                
+                return HttpResponseRedirect(reverse('core:homepage'))  
             else:
                 messages.error(request, "Invalid email or password")
         else:
@@ -114,3 +141,6 @@ def moderator_dashboard(request):
     return render(request, 'accounts/moderator_dashboard.html', {'pending_products': pending_products})
 
 # dodati da se prilikom accept ili reject posalje poruka
+
+def waiting_for_approval(request):
+    return render(request, 'accounts/waiting_for_approval.html')
