@@ -9,7 +9,7 @@ from django.urls import reverse
 from .models import UserProfile
 from django.contrib.auth import logout as auth_logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-
+from core.models import Product
 
 def register(request):
     if request.method == 'POST':
@@ -94,3 +94,23 @@ def profile(request):
         'user_form': user_form,
         'password_form': password_form,
     })
+    
+def moderator_dashboard(request):
+    if request.method == "POST":
+        product_id = request.POST.get("product_id")
+        new_state = request.POST.get("new_state")
+
+        product = get_object_or_404(Product, id=product_id)
+
+        if new_state == Product.State.REJECTED:
+            product.delete()  
+        else:
+            product.state = new_state
+            product.save()
+
+        return redirect('accounts:moderator_dashboard')
+
+    pending_products = Product.objects.filter(state=Product.State.PENDING)
+    return render(request, 'accounts/moderator_dashboard.html', {'pending_products': pending_products})
+
+# dodati da se prilikom accept ili reject posalje poruka
