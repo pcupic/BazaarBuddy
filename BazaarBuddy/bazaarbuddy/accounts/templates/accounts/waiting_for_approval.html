@@ -11,10 +11,27 @@
 <body>
     <div class="container">
         <div class="card">
-            <h1>Your Moderator Account is Pending Approval</h1>
-            <p>Thank you for registering as a moderator. Your account is currently under review by the admin. Please check back later.</p>
-            <p>You can do everything a regular user can, but you will not be able to approve or reject products until your account is approved by the admin.</p>
-            <a href="/" class="button">Go to Home Page</a>
+            {% if user.profile.approval_status == 'pending' %}
+                <h1>Your Moderator Account is Pending Approval</h1>
+                <p>Thank you for registering as a moderator. Your account is currently under review by the admin. Please check back later.</p>
+                <p>You can do everything a regular user can, but you will not be able to approve or reject products until your account is approved by the admin.</p>
+            {% elif user.profile.approval_status == 'rejected' %}
+                <h1>Your Moderator Account Was Rejected</h1>
+                <p>Unfortunately, your moderator application was rejected. You can proceed as a regular user or delete your account.</p>
+                <form method="POST" action="{% url 'accounts:delete_account' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="button delete-account">Delete Account</button>
+                </form>
+                <form method="POST" action="{% url 'accounts:proceed_as_regular' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="button proceed-regular">Proceed as Regular User</button>
+                </form>
+            {% endif %}
+            <form method="POST" action="{% url 'accounts:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="button logout-button">Logout</button>
+            </form>
+            <a href="/" class="button home-button">Go to Home Page</a>
         </div>
     </div>
 </body>

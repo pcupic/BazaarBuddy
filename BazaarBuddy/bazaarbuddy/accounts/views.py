@@ -34,7 +34,7 @@ def register(request):
 
     return render(request, 'accounts/register.html', {'form': form})
 
-@staff_member_required 
+@staff_member_required  
 def approve_moderators(request):
     pending_moderators = UserProfile.objects.filter(user_type='moderator', approval_status='pending')
 
@@ -45,11 +45,12 @@ def approve_moderators(request):
         
         if action == 'approve':
             user_profile.approval_status = 'approved'
+            user_profile.save()
         elif action == 'reject':
-            user_profile.approval_status = 'rejected'
-        
-        user_profile.save()
-        return redirect('accounts:approve_moderators') 
+            user_profile.approval_status = 'rejected'  
+            user_profile.save()
+
+        return redirect('accounts:approve_moderators')  
 
     return render(request, 'accounts/approve_moderators.html', {'pending_moderators': pending_moderators})
 
@@ -81,37 +82,20 @@ def login(request):
 @login_required
 def profile(request):
     user_form = None 
-    password_form = None  
+    password_form = None
 
     if request.method == 'POST':
         if 'edit_profile' in request.POST:
-            user_form = UserEditForm(request.POST, instance=request.user)
-            if user_form.is_valid():
-                user = user_form.save(commit=False)
-                user.username = user.email 
-                user.save()
-                messages.success(request, "Profile is updated.")
-                return redirect('accounts:profile')  
-
+            return edit_profile(request)
+        
         elif 'change_password' in request.POST:
-            password_form = PasswordChangeForm(request.user, request.POST)
-            if password_form.is_valid():
-                password_form.save()
-                update_session_auth_hash(request, password_form.user) 
-                messages.success(request, "Your password has been changed.")
-                return redirect('accounts:profile') 
-
+            return change_password(request)
+        
         elif 'logout' in request.POST:
-            auth_logout(request)
-            messages.success(request, "You have successfully logged out.")
-            return redirect('accounts:login')  
-
+            return logout(request)
+        
         elif 'delete_profile' in request.POST:
-            user = request.user
-            user.delete()
-            auth_logout(request)  
-            messages.success(request, "Your profile has been deleted.")
-            return redirect('accounts:login') 
+            return delete_account(request)
 
     else:
         user_form = UserEditForm(instance=request.user)
@@ -121,8 +105,43 @@ def profile(request):
         'user_form': user_form,
         'password_form': password_form,
     })
-    
+
+def edit_profile(request):
+    user_form = UserEditForm(request.POST, instance=request.user)
+    if user_form.is_valid():
+        user = user_form.save(commit=False)
+        user.username = user.email 
+        user.save()
+        messages.success(request, "Profile is updated.")
+        return redirect('accounts:profile')
+    return render(request, 'accounts/profile.html', {'user_form': user_form})
+
+def change_password(request):
+    password_form = PasswordChangeForm(request.user, request.POST)
+    if password_form.is_valid():
+        password_form.save()
+        update_session_auth_hash(request, password_form.user)
+        messages.success(request, "Your password has been changed.")
+        return redirect('accounts:profile')
+    return render(request, 'accounts/profile.html', {'password_form': password_form})
+
+def logout(request):
+    auth_logout(request)
+    messages.success(request, "You have successfully logged out.")
+    return redirect('accounts:login')
+
+def delete_account(request):
+    user = request.user
+    user.delete()  
+    auth_logout(request) 
+    messages.success(request, "Your profile has been deleted.")
+    return redirect('accounts:login')
+
+@login_required
 def moderator_dashboard(request):
+    user_profile = request.user.profile
+    if user_profile.is_moderator() and not user_profile.is_approved():  
+        return redirect('accounts:waiting_for_approval')
     if request.method == "POST":
         product_id = request.POST.get("product_id")
         new_state = request.POST.get("new_state")
@@ -144,3 +163,11 @@ def moderator_dashboard(request):
 
 def waiting_for_approval(request):
     return render(request, 'accounts/waiting_for_approval.html')
+
+@login_required
+def proceed_as_regular(request):
+    if request.method == "POST":
+        user_profile = request.user.profile
+        user_profile.user_type = 'regular'
+        user_profile.save()
+        return redirect('core:home')  

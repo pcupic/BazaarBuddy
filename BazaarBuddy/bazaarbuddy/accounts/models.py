@@ -19,3 +19,9 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} ({self.user_type}) - {self.approval_status}"
+    
+    def is_approved(self):
+        return self.approval_status == 'approved'
+
+    def is_moderator(self):
+        return self.user_type == 'moderator'

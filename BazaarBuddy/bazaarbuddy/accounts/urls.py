@@ -10,4 +10,7 @@ urlpatterns = [
     path('moderator-dashboard/', views.moderator_dashboard, name="moderator_dashboard"),
     path('approve-moderators/', views.approve_moderators, name='approve_moderators'),
     path('waiting-for-approval/', views.waiting_for_approval, name='waiting_for_approval'),
+    path('delete_account/', views.delete_account, name='delete_account'),
+    path('logout/', views.logout, name="logout"),
+    path('proceed-as-regular/', views.proceed_as_regular, name='proceed_as_regular'),
 ]
