@@ -6,16 +6,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Default Title{% endblock %} | BazaarBuddy</title>
-    <link rel="stylesheet" href="{% static 'images/app.css' %}">
+    <link rel="stylesheet" href="/static/core/base.css">
+    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <nav>
-        <a href="{% url 'core:homepage' %}">Home</a> |
-        <a href="{% url 'core:index' %}">Products</a> |
-        <a href="{% url 'core:create_product' %}">Post Product</a> |
-        <a href="{% url 'core:my_posted_products' %}">My Products</a> |
+        <div class="logo">BazaarBuddy</div>
+        <div class="nav-links">
+                <a href="{% url 'core:homepage' %}">Home</a> 
+                <a href="{% url 'core:index' %}">Products</a> 
+                <a href="{% url 'core:create_product' %}">Post Product</a> 
+                <a href="{% url 'core:my_posted_products' %}">My Products</a> 
+                {% if user.is_authenticated %}
+                    {% if user.profile.user_type == 'moderator' %}
+                        <a href="{% url 'accounts:moderator_dashboard' %}">Moderator Dashboard</a> 
+                    {% elif user.profile.user_type == 'admin' %}
+                        <a href="{% url 'admin:index' %}">Admin Dashboard</a> 
+                    {% endif %}
+                    <a href="{% url 'accounts:profile' %}">Profile</a> 
+                    <a href="{% url 'accounts:logout' %}">Logout</a> 
+                {% else %}
+                    <a href="{% url 'accounts:login' %}">Login</a> 
+                    <a href="{% url 'accounts:register' %}">Register</a> 
+                {% endif %}
+        </div>
     </nav>
+
+    
     {% block content %}
     {%  endblock %}
+
+    <footer>
+        <p>&copy; 2025 BazaarBuddy. All rights reserved.</p>
+        <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Contact Us</a></li>
+        </ul>
+    </footer>
 </body>
 </html>
