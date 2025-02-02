@@ -14,5 +14,8 @@
     <p><strong>Created At:</strong> {{ product.date_created }}</p>
     <p><strong>Updated At:</strong> {{ product.date_updated }}</p>
     <p><strong>Id:</strong> {{ product.id }}</p>
+    {% if request.user != product.user %}
+        <a href="{% url 'messenger:new_chat' product.id %}">Contact seller</a>
+    {% endif %}
 </div>
 {% endblock %}
