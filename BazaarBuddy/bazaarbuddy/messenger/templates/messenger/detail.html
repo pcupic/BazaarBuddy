@@ -1,0 +1,38 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail</title>
+    <link rel="stylesheet" href="{% static 'messenger/detail.css' %}">
+</head>
+<body>
+    <body>
+        <div>
+            <h2>Messages</h2>
+            {% if chat.messages.all %}
+                {% for message in chat.messages.all %}
+                    <div>
+                        <div>
+                            <p><strong>{{ message.created_by.first_name }} {{ message.created_by.last_name }}</strong> @ {{ message.created_at }}</p>
+                            <p>{{ message.content }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No messages in this conversation.</p> 
+            {% endif %}
+        </div>
+        
+        <form method="post" action=".">
+            {% csrf_token %}
+        
+            {{ form.as_p }}
+        
+            <button>Send</button>
+        </form>
+    </body>
+    
+</body>
+</html>

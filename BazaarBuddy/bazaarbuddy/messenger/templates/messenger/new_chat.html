@@ -1,0 +1,31 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Chat</title>
+    <link rel="stylesheet" href="{% static "messenger/new_chat.css" %}">
+</head>
+<body>
+    <form method="post" action=".">
+        {% csrf_token %}
+    
+        <div>
+            {{ form.as_p }}
+        </div>
+    
+        {% if form.errors or form.non_field_errors %}
+            <div>
+                {% for field in form %}
+                    {{ field.errors }}
+                {% endfor %}
+    
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+    
+        <button>Send</button>
+    </form>
+</body>
+</html>
