@@ -32,7 +32,7 @@ def new_chat(request, product_id):
             chat_message.created_by = request.user  
             chat_message.save()
 
-        return redirect('messenger:detail', pk=product_id)
+        return redirect('messenger:detail', pk=chat.id)
     else:
         form = MessageForm()
     
