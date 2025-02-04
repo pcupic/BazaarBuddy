@@ -13,4 +13,5 @@ urlpatterns = [
     path('delete_account/', views.delete_account, name='delete_account'),
     path('logout/', views.logout, name="logout"),
     path('proceed-as-regular/', views.proceed_as_regular, name='proceed_as_regular'),
+    path('regular-dashboard/', views.regular_dashboard, name="regular_dashboard")
 ]

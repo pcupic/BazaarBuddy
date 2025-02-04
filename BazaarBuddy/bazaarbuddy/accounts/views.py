@@ -159,7 +159,9 @@ def moderator_dashboard(request):
     pending_products = Product.objects.filter(state=Product.State.PENDING)
     return render(request, 'accounts/moderator_dashboard.html', {'pending_products': pending_products})
 
-# dodati da se prilikom accept ili reject posalje poruka
+@login_required
+def regular_dashboard(request):
+    return render(request, 'accounts/regular_dashboard.html')
 
 def waiting_for_approval(request):
     return render(request, 'accounts/waiting_for_approval.html')

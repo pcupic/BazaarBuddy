@@ -3,5 +3,18 @@
 {% block title %}Homepage{% endblock %}
 
 {% block content %}
-    <p>Hello, World!</p>
+<div class="profile-header">
+    <h2>Welcome, {{ user.first_name }} {{ user.last_name }}</h2>
+    <hr>
+    <p>We are happy to show you our greatest creation - BazaarBuddy!</p>
+    <p>BazaarBuddy is a marketplace web application that was made for college course called Software Engineering.</p>
+    <p>Authors of this site are Patrik Čupić and Matko Čaušić. Website was made under theirs' mentor supervision - Hrvoje Levara Leventić.</p>
+    <p>And now for the part we've all been waiting for...</p>
+    <hr>
+    <h2>Lorem Ipsum Section</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+</div>
 {% endblock content %}

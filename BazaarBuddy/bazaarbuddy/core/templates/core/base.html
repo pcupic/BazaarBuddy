@@ -14,21 +14,28 @@
         <div class="logo">BazaarBuddy</div>
         <div class="nav-links">
                 <a href="{% url 'core:homepage' %}">Home</a> 
-                <a href="{% url 'core:index' %}">Products</a> 
-                <a href="{% url 'core:create_product' %}">Post Product</a> 
-                <a href="{% url 'core:my_posted_products' %}">My Products</a> 
-                {% if user.is_authenticated %}
-                    <a href="{% url 'messenger:inbox' %}">Inbox</a>
-                    {% if user.profile.user_type == 'moderator' %}
-                        <a href="{% url 'accounts:moderator_dashboard' %}">Moderator Dashboard</a> 
-                    {% elif user.profile.user_type == 'admin' %}
-                        <a href="{% url 'admin:index' %}">Admin Dashboard</a> 
-                    {% endif %}
-                    <a href="{% url 'accounts:profile' %}">Profile</a> 
+                <a href="{% url 'core:index' %}">Products</a>
+                {% if user.profile.user_type == 'regular' %}
+                    <a href="{% url 'accounts:regular_dashboard' %}">My Dashboard</a>
+                    {% if user.is_authenticated %}
                     <a href="{% url 'accounts:logout' %}">Logout</a> 
+                    {% endif %}
                 {% else %}
-                    <a href="{% url 'accounts:login' %}">Login</a> 
-                    <a href="{% url 'accounts:register' %}">Register</a> 
+                    <a href="{% url 'core:create_product' %}">Post Product</a> 
+                    <a href="{% url 'core:my_posted_products' %}">My Products</a> 
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'messenger:inbox' %}">Inbox</a>
+                        {% if user.profile.user_type == 'moderator' %}
+                            <a href="{% url 'accounts:moderator_dashboard' %}">Moderator Dashboard</a> 
+                        {% elif user.profile.user_type == 'admin' %}
+                            <a href="{% url 'admin:index' %}">Admin Dashboard</a> 
+                        {% endif %}
+                        <a href="{% url 'accounts:profile' %}">Profile</a> 
+                        <a href="{% url 'accounts:logout' %}">Logout</a> 
+                    {% else %}
+                        <a href="{% url 'accounts:login' %}">Login</a> 
+                        <a href="{% url 'accounts:register' %}">Register</a> 
+                    {% endif %}
                 {% endif %}
         </div>
     </nav>
