@@ -17,5 +17,26 @@
     {% if request.user != product.user %}
         <a href="{% url 'messenger:new_chat' product.id %}">Contact seller</a>
     {% endif %}
+
+    <p>Average Rating: {{ average_rating|floatformat:2 }} / 5</p>
+    {% if not user_has_rated %}
+    <p>Rate this product:</p>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="rating-numbers">
+        <button type="submit" name="grade" value="1">1</button>
+        <button type="submit" name="grade" value="2">2</button>
+        <button type="submit" name="grade" value="3">3</button>
+        <button type="submit" name="grade" value="4">4</button>
+        <button type="submit" name="grade" value="5">5</button>
+      </div>
+    </form>
+  {% else %}
+        <p>You have already rated this product: {{ user_rating.grade }}</p>
+        <form method="POST" action="{% url 'core:remove_rating' product.id %}">
+            {% csrf_token %}
+            <button type="submit">Remove Rating</button>
+        </form>
+  {% endif %}
 </div>
 {% endblock %}

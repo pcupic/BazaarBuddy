@@ -27,7 +27,6 @@ class Product(models.Model):
         max_length=20,
         choices=Condition.choices   
     )
-    grade = models.DecimalField(decimal_places=1, max_digits=2, default=0)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
@@ -45,10 +44,19 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def average_rating(self):
+        ratings = self.rating_set.all() 
+        if ratings.exists():
+            return sum(rating.grade for rating in ratings) / ratings.count()
+        return 0  
 
 
 class Rating(models.Model):
-    userId = models.ForeignKey(User, on_delete=models.CASCADE)
-    productId = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     grade = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])
+    
+    class Meta:
+        unique_together = ('user', 'product')

@@ -3,7 +3,7 @@ from .forms import ProductForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .models import Product,Category
+from .models import Product, Category, Rating
 
 @login_required
 def my_posted_products(request):
@@ -48,7 +48,7 @@ def home(request):
 @login_required
 def create_product(request):
     if request.method == 'POST':
-        form = ProductForm(request.POST, request.FILES)
+        form = ProductForm(request.POST)
         if form.is_valid():
             product = form.save(commit = False)
             product.user = request.user
@@ -62,9 +62,49 @@ def create_product(request):
 
 @login_required
 def product_detail(request, id):
-    product = get_object_or_404(Product, pk = id)
-    context = {
-        'product': product
-    }
+    product = get_object_or_404(Product, pk=id)
+    
+    user_rating = Rating.objects.filter(user=request.user, product=product).first()
+    user_has_rated = user_rating is not None
+    average_rating = product.average_rating()
+    
+    if request.method == "POST":
+        grade_value = int(request.POST.get('grade'))
+        if 1 <= grade_value <= 5:
+            if user_has_rated:
+                user_rating.grade = grade_value
+                user_rating.save()
+                messages.success(request, "Your rating has been updated!")
+            else:
+                Rating.objects.create(
+                    product=product,
+                    user=request.user,
+                    grade=grade_value
+                )
+                messages.success(request, "Your rating has been successfully saved!")
+        else:
+            messages.error(request, "The rating must be between 1 and 5.")
+        return redirect('core:product_detail', id=id)
 
+    context = {
+        'product': product,
+        'user_has_rated': user_has_rated,
+        'user_rating': user_rating, 
+        'average_rating': average_rating,
+    }
+    
     return render(request, 'core/product_detail.html', context)
+
+@login_required
+def remove_rating(request, id):
+    product = get_object_or_404(Product, pk=id)
+    
+    user_rating = Rating.objects.filter(user=request.user, product=product).first()
+    
+    if user_rating:
+        user_rating.delete()
+        messages.success(request, "Your rating has been removed.")
+    else:
+        messages.error(request, "You haven't rated this product yet.")
+    
+    return redirect('core:product_detail', id=id)
