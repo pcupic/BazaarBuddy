@@ -16,6 +16,37 @@ def my_posted_products(request):
     return render(request, 'core/my_posted_products.html', context)
 
 @login_required
+def edit_product(request, id):
+    product = get_object_or_404(Product, id=id, user=request.user)
+
+    if product.state != "PENDING":
+        messages.error(request, "You can only edit products that are pending approval.")
+        return redirect('core:my_posted_products')
+
+    if request.method == 'POST':
+        form = ProductForm(request.POST, instance=product)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Product updated successfully!")
+            return redirect('core:my_posted_products')
+    else:
+        form = ProductForm(instance=product)
+
+    return render(request, 'core/edit_product.html', {'form': form, 'product': product})
+
+@login_required
+def delete_product(request, id):
+    product = get_object_or_404(Product, id=id, user=request.user)
+
+    if product.state not in ["PENDING", "ACCEPTED"]:
+        messages.error(request, "You can only delete pending or accepted products.")
+        return redirect('core:my_posted_products')
+
+    product.delete()
+    messages.success(request, "Product deleted successfully.")
+    return redirect('core:my_posted_products')
+
+@login_required
 def index(request):
     products = Product.objects.filter(state=Product.State.ACCEPTED)
     categories = Category.objects.all()
