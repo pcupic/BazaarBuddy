@@ -11,6 +11,7 @@ from django.contrib.auth import logout as auth_logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from core.models import Product
+from messenger.models import Chat
 
 def register(request):
     if request.method == 'POST':
@@ -106,6 +107,7 @@ def profile(request):
         'password_form': password_form,
     })
 
+@login_required
 def edit_profile(request):
     user_form = UserEditForm(request.POST, instance=request.user)
     if user_form.is_valid():
@@ -116,6 +118,7 @@ def edit_profile(request):
         return redirect('accounts:profile')
     return render(request, 'accounts/profile.html', {'user_form': user_form})
 
+@login_required
 def change_password(request):
     password_form = PasswordChangeForm(request.user, request.POST)
     if password_form.is_valid():
@@ -125,11 +128,13 @@ def change_password(request):
         return redirect('accounts:profile')
     return render(request, 'accounts/profile.html', {'password_form': password_form})
 
+@login_required
 def logout(request):
     auth_logout(request)
     messages.success(request, "You have successfully logged out.")
     return redirect('accounts:login')
 
+@login_required
 def delete_account(request):
     user = request.user
     user.delete()  
@@ -161,8 +166,23 @@ def moderator_dashboard(request):
 
 @login_required
 def regular_dashboard(request):
-    return render(request, 'accounts/regular_dashboard.html')
+    products = Product.objects.filter(user=request.user).all()
+    chats = Chat.get_user_chats(request.user)
+    chat_messages = []
+    for chat in chats:
+        last_message = chat.messages.last() 
+        if last_message:
+            chat_messages.append({
+                'chat': chat,
+                'last_message': last_message
+            })
 
+    return render(request, 'accounts/regular_dashboard.html', {
+        'products': products,
+        'chat_messages': chat_messages,
+    })
+    
+@login_required
 def waiting_for_approval(request):
     return render(request, 'accounts/waiting_for_approval.html')
 
@@ -172,4 +192,4 @@ def proceed_as_regular(request):
         user_profile = request.user.profile
         user_profile.user_type = 'regular'
         user_profile.save()
-        return redirect('core:home')  
+        return redirect('core:homepage')  

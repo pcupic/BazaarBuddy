@@ -1,31 +1,34 @@
-{% load static %}
+{% extends 'core/base.html' %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Chat</title>
-    <link rel="stylesheet" href="{% static "messenger/new_chat.css" %}">
-</head>
-<body>
+{% block title %}New Chat{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 600px;">
+    <h2 class="text-center mb-4">New Chat</h2>
+    
     <form method="post" action=".">
         {% csrf_token %}
-    
-        <div>
+        
+        <div class="mb-3">
             {{ form.as_p }}
         </div>
-    
+        
         {% if form.errors or form.non_field_errors %}
-            <div>
+            <div class="alert alert-danger">
                 {% for field in form %}
-                    {{ field.errors }}
+                    {% for error in field.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
                 {% endfor %}
-    
-                {{ form.non_field_errors }}
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
             </div>
         {% endif %}
-    
-        <button>Send</button>
+        
+        <div class="d-flex justify-content-center">
+            <button type="submit" class="btn btn-primary btn-lg w-100">Send</button>
+        </div>
     </form>
-</body>
-</html>
+</div>
+{% endblock %}

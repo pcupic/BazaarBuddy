@@ -6,9 +6,13 @@ from .models import Product, Category
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        exclude = ['user','state','date_created','date_updated', 'grade']
+        exclude = ['user', 'state', 'date_created', 'date_updated', 'grade']
         widgets = {
-            'description': forms.Textarea(attrs={'rows': 4})
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter product name'}),
+            'price': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter price'}),
+            'category': forms.Select(attrs={'class': 'form-select'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Enter product description'}),
+            'condition': forms.Select(attrs={'class': 'form-select'}),
         }
 
 class LoginForm(AuthenticationForm):

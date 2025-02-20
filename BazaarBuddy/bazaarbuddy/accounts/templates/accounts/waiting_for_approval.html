@@ -1,38 +1,43 @@
-{% load static %}
+{% extends 'core/base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pending Approval</title>
-    <link rel="stylesheet" href="{% static "accounts/waiting_for_approval.css" %}">
-</head>
-<body>
-    <div class="container">
-        <div class="card">
-            {% if user.profile.approval_status == 'pending' %}
-                <h1>Your Moderator Account is Pending Approval</h1>
-                <p>Thank you for registering as a moderator. Your account is currently under review by the admin. Please check back later.</p>
-                <p>You can do everything a regular user can, but you will not be able to approve or reject products until your account is approved by the admin.</p>
-            {% elif user.profile.approval_status == 'rejected' %}
-                <h1>Your Moderator Account Was Rejected</h1>
-                <p>Unfortunately, your moderator application was rejected. You can proceed as a regular user or delete your account.</p>
-                <form method="POST" action="{% url 'accounts:delete_account' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="button delete-account">Delete Account</button>
-                </form>
-                <form method="POST" action="{% url 'accounts:proceed_as_regular' %}">
-                    {% csrf_token %}
-                    <button type="submit" class="button proceed-regular">Proceed as Regular User</button>
-                </form>
-            {% endif %}
-            <form method="POST" action="{% url 'accounts:logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="button logout-button">Logout</button>
-            </form>
-            <a href="/" class="button home-button">Go to Home Page</a>
+{% block title %}Pending Approval{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column">
+    <div class="container py-5 flex-grow-1">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                {% if user.profile.approval_status == 'pending' %}
+                    <h2 class="text-center mb-4">Your Moderator Account is Pending Approval</h2>
+                    <p class="lead text-center">Thank you for registering as a moderator. Your account is under review. Please check back later.</p>
+                    <p class="text-center">You can perform regular user actions, but you cannot approve or reject products until approved by the admin.</p>
+                {% elif user.profile.approval_status == 'rejected' %}
+                    <h2 class="text-center mb-4">Your Moderator Account Was Rejected</h2>
+                    <p class="lead text-center">Your moderator application was rejected. You can proceed as a regular user or delete your account.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <form method="POST" action="{% url 'accounts:delete_account' %}" class="w-100">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger w-100">Delete Account</button>
+                        </form>
+                        <form method="POST" action="{% url 'accounts:proceed_as_regular' %}" class="w-100">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary w-100">Proceed as Regular User</button>
+                        </form>
+                    </div>
+                {% endif %}
+
+                <div class="d-flex justify-content-center gap-3 mt-4">
+                    <form method="POST" action="{% url 'accounts:logout' %}" class="w-100">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger w-100">Logout</button>
+                    </form>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="/" class="btn btn-secondary w-100">Go to Home Page</a>
+                </div>
+            </div>
         </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}

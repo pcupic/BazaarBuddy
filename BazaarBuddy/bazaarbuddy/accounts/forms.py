@@ -36,12 +36,29 @@ class RegistrationForm(forms.ModelForm):
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email']  
+        fields = ['first_name', 'last_name', 'email']
+        widgets = {
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}),
+        }
 
 class PasswordChangeCustomForm(PasswordChangeForm):
-    old_password = forms.CharField(widget=forms.PasswordInput, required=True, label="Current password")
-    new_password1 = forms.CharField(widget=forms.PasswordInput, required=True, label="New password")
-    new_password2 = forms.CharField(widget=forms.PasswordInput, required=True, label="Confirm new password")
+    old_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Current Password'}),
+        required=True,
+        label="Current password"
+    )
+    new_password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'New Password'}),
+        required=True,
+        label="New password"
+    )
+    new_password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm New Password'}),
+        required=True,
+        label="Confirm new password"
+    )
     
 class EmailAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={'autofocus': True}))

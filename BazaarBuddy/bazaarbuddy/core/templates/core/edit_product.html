@@ -3,25 +3,29 @@
 {% block title %}Edit Product{% endblock %}
 
 {% block content %}
-<div class="max-w-lg mx-auto bg-white p-6 rounded shadow-md">
-    <h1 class="text-2xl font-semibold text-gray-800">Edit Product</h1>
-    
-    {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-                <li class="text-red-500">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+<div class="container my-4">
+    <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+        <div class="card-body">
+            <h1 class="card-title mb-4">Edit Product</h1>
+            
+            {% if messages %}
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        {% for message in messages %}
+                            <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
 
-    <form method="POST">
-        {% csrf_token %}
-        <div class="space-y-4">
-            {{ form.as_p }}
+            <form method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    {{ form.as_p }}
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+            </form>
         </div>
-        <button type="submit" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-            Save Changes
-        </button>
-    </form>
+    </div>
 </div>
 {% endblock %}

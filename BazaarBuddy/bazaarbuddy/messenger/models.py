@@ -15,6 +15,10 @@ class Chat(models.Model):
     def __str__(self):
         return f"Chat for {self.product.title}"
     
+    @staticmethod
+    def get_user_chats(user):
+        return Chat.objects.filter(members=user).all()
+    
 class Message(models.Model):
     chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
     content = models.TextField()

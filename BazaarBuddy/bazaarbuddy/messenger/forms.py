@@ -7,5 +7,10 @@ class MessageForm(forms.ModelForm):
         model = Message
         fields = ("content",)
         widgets = {
-            'content': Textarea(attrs={'placeholder': 'Enter your message here...', 'rows': 5}),
+            'content': Textarea(attrs={
+                'placeholder': 'Enter your message...',
+                'rows': 3,  
+                'class': 'form-control message-input',
+                'style': 'resize: none; padding: 8px; font-size: 14px; width: 100%;',  
+            }),
         }

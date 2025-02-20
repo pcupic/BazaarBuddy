@@ -1,20 +1,43 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Homepage{% endblock %}
+{% block title %}Welcome to BazaarBuddy{% endblock %}
 
 {% block content %}
-<div class="profile-header">
-    <h2>Welcome, {{ user.first_name }} {{ user.last_name }}</h2>
-    <hr>
-    <p>We are happy to show you our greatest creation - BazaarBuddy!</p>
-    <p>BazaarBuddy is a marketplace web application that was made for college course called Software Engineering.</p>
-    <p>Authors of this site are Patrik Čupić and Matko Čaušić. Website was made under theirs' mentor supervision - Hrvoje Levara Leventić.</p>
-    <p>And now for the part we've all been waiting for...</p>
-    <hr>
-    <h2>Lorem Ipsum Section</h2>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-    <p>Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+<div class="container mt-5">
+    <div class="profile-header text-center mb-5">
+        <h1 class="display-4 text-danger">Welcome, {{ user.first_name }} {{ user.last_name }}!</h1>
+        <hr class="my-4">
+        <p class="lead text-muted">Thank you for joining the BazaarBuddy community! We're thrilled to have you on board.</p>
+        <p class="text-muted">BazaarBuddy is an innovative and user-friendly marketplace designed to enhance your buying and selling experience. Built by Software Engineering students Patrik Čupić and Matko Čaušić under the mentorship of doc. dr. sc. Hrvoje Leventić.</p>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-light rounded">
+                <div class="card-body">
+                    <h3 class="card-title text-success">Our Mission</h3>
+                    <p class="card-text">At BazaarBuddy, we aim to create a seamless and secure marketplace where you can easily connect with buyers and sellers. Whether you're shopping for products or looking to make a quick sale, we've got you covered with a smooth and reliable experience.</p>
+                    <a href="#" class="btn btn-outline-danger">Learn More</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm border-light rounded">
+                <div class="card-body">
+                    <h3 class="card-title text-info">How It Works</h3>
+                    <p class="card-text">To get started, simply create an account, explore our wide range of products, and connect with sellers. You can also list your own items for sale, connect with buyers, and even use our built-in messaging and payment systems to make every transaction easy and secure.</p>
+                    <a href="#" class="btn btn-outline-info">Start Trading</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mt-5">
+        <h2 class="display-4 text-dark">Why Choose BazaarBuddy?</h2>
+        <hr class="my-4">
+        <p class="lead text-muted">BazaarBuddy isn't just another marketplace – it's a trusted community. Our platform is designed with your safety and convenience in mind, offering a transparent and hassle-free trading experience. We're here to simplify your transactions and make your journey with us smooth.</p>
+        <a href="#" class="btn btn-lg btn-outline-success">Join Our Community</a>
+    </div>
 </div>
 {% endblock content %}

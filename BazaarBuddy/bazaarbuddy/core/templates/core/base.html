@@ -5,52 +5,113 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Default Title{% endblock %} | BazaarBuddy</title>
-    <link rel="stylesheet" href="/static/core/base.css">
-    {% block extra_css %}{% endblock %}
+    <title>{% block title %}Base{% endblock %} | BazaarBuddy</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .nav-link {
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .nav-link:hover {
+            transform: scale(1.1);
+            color: #ff6347;
+        }
+
+        .navbar-brand {
+            font-size: 2rem; 
+            font-weight: bold;
+            color: #ff6347 !important; 
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.1); 
+            color: #fff !important; 
+        }
+    </style>
 </head>
-<body>
-    <nav>
-        <div class="logo">BazaarBuddy</div>
-        <div class="nav-links">
-                <a href="{% url 'core:homepage' %}">Home</a> 
-                <a href="{% url 'core:index' %}">Products</a>
-                {% if user.profile.user_type == 'regular' %}
-                    <a href="{% url 'accounts:regular_dashboard' %}">My Dashboard</a>
-                    {% if user.is_authenticated %}
-                    <a href="{% url 'accounts:logout' %}">Logout</a> 
-                    {% endif %}
-                {% else %}
-                    <a href="{% url 'core:create_product' %}">Post Product</a> 
-                    <a href="{% url 'core:my_posted_products' %}">My Products</a> 
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'messenger:inbox' %}">Inbox</a>
-                        {% if user.profile.user_type == 'moderator' %}
-                            <a href="{% url 'accounts:moderator_dashboard' %}">Moderator Dashboard</a> 
-                        {% elif user.profile.user_type == 'admin' %}
-                            <a href="{% url 'admin:index' %}">Admin Dashboard</a> 
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'core:homepage' %}">BazaarBuddy</a> 
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'core:homepage' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'core:index' %}">Products</a>
+                    </li>
+                    {% if user.profile.user_type == 'regular' %}
+                        <li class="nav-item">
+                            <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'accounts:regular_dashboard' %}">My Dashboard</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'accounts:logout' %}">Logout</a>
+                            </li>
                         {% endif %}
-                        <a href="{% url 'accounts:profile' %}">Profile</a> 
-                        <a href="{% url 'accounts:logout' %}">Logout</a> 
                     {% else %}
-                        <a href="{% url 'accounts:login' %}">Login</a> 
-                        <a href="{% url 'accounts:register' %}">Register</a> 
+                        <li class="nav-item">
+                            <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'core:create_product' %}">Post Product</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'core:my_posted_products' %}">My Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'accounts:profile' %}">Profile</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'messenger:inbox' %}">Inbox</a>
+                            </li>
+                            {% if user.profile.user_type == 'moderator' %}
+                                <li class="nav-item">
+                                    <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'accounts:moderator_dashboard' %}">Moderator Dashboard</a>
+                                </li>
+                            {% elif user.profile.user_type == 'admin' %}
+                                <li class="nav-item">
+                                    <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'admin:index' %}">Admin Dashboard</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'accounts:approve_moderators' %}">Approve Moderators</a>
+                                </li>
+                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'accounts:logout' %}">Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'accounts:login' %}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light px-3 py-2 rounded-3" href="{% url 'accounts:register' %}">Register</a>
+                            </li>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
+                </ul>
+            </div>
         </div>
     </nav>
 
-    
-    {% block content %}
-    {%  endblock %}
+    <main class="container py-5">
+        {% block content %}{% endblock %}
+    </main>
 
-    <footer>
-        <p>&copy; 2025 BazaarBuddy. All rights reserved.</p>
-        <ul>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Terms of Service</a></li>
-            <li><a href="#">Contact Us</a></li>
+    <footer class="bg-dark text-light text-center py-3 mt-5">
+        <p class="mb-1">&copy; 2025 BazaarBuddy. All rights reserved.</p>
+        <ul class="list-inline">
+            <li class="list-inline-item"><a class="text-light text-decoration-none" href="#">Privacy Policy</a></li>
+            <li class="list-inline-item"><a class="text-light text-decoration-none" href="#">Terms of Service</a></li>
+            <li class="list-inline-item"><a class="text-light text-decoration-none" href="#">Contact Us</a></li>
         </ul>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

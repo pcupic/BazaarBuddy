@@ -1,55 +1,50 @@
-{% load static %}
+{% extends 'core/base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moderator Dashboard</title>
-    <link rel="stylesheet" href="{% static 'accounts/moderator_dashboard.css' %}">
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Moderator Dashboard</h1>
-            <h2>Pending Products</h2>
+{% block title %}Moderator Dashboard{% endblock %}
+
+{% block content %}
+    <div class="container my-4">
+        <header class="mb-4">
+            <h1 class="display-4">Moderator Dashboard</h1>
+            <h2 class="h4 text-muted">Pending Products</h2>
         </header>
 
         {% if pending_products %}
-            <table class="product-table">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Price</th>
-                        <th>Condition</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for product in pending_products %}
-                    <tr>
-                        <td>{{ product.title }}</td>
-                        <td>{{ product.description }}</td>
-                        <td>{{ product.category.name }}</td>
-                        <td>${{ product.price }}</td>
-                        <td>{{ product.condition }}</td>
-                        <td>
-                            <form method="POST">
-                                {% csrf_token %}
-                                <input type="hidden" name="product_id" value="{{ product.id }}">
-                                <button type="submit" name="new_state" value="Accepted" class="accept-btn">Accept</button>
-                                <button type="submit" name="new_state" value="Rejected" class="reject-btn">Reject</button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Condition</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in pending_products %}
+                        <tr>
+                            <td>{{ product.title }}</td>
+                            <td>{{ product.description }}</td>
+                            <td>{{ product.category.name }}</td>
+                            <td>${{ product.price }}</td>
+                            <td>{{ product.condition }}</td>
+                            <td>
+                                <form method="POST" class="d-inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                    <button type="submit" name="new_state" value="Accepted" class="btn btn-success btn-sm">Accept</button>
+                                    <button type="submit" name="new_state" value="Rejected" class="btn btn-danger btn-sm ms-2">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         {% else %}
-            <p class="no-products">No pending products.</p>
+            <p class="alert alert-info">No pending products.</p>
         {% endif %}
     </div>
-</body>
-</html>
+{% endblock %}

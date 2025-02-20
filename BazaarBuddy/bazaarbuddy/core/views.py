@@ -19,16 +19,14 @@ def my_posted_products(request):
 def edit_product(request, id):
     product = get_object_or_404(Product, id=id, user=request.user)
 
-    if product.state != "PENDING":
-        messages.error(request, "You can only edit products that are pending approval.")
-        return redirect('core:my_posted_products')
+    if product.state == "Pending":
+        return redirect('core:index')
 
     if request.method == 'POST':
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
             form.save()
-            messages.success(request, "Product updated successfully!")
-            return redirect('core:my_posted_products')
+            return redirect('core:index')
     else:
         form = ProductForm(instance=product)
 
@@ -38,14 +36,14 @@ def edit_product(request, id):
 def delete_product(request, id):
     product = get_object_or_404(Product, id=id, user=request.user)
 
-    if product.state not in ["PENDING", "ACCEPTED"]:
-        messages.error(request, "You can only delete pending or accepted products.")
-        return redirect('core:my_posted_products')
-
-    product.delete()
-    messages.success(request, "Product deleted successfully.")
-    return redirect('core:my_posted_products')
-
+    if product.state in ['Pending', 'Accepted']:
+        product.delete()
+        messages.success(request, "Product deleted successfully.")
+        return redirect('core:index')
+    
+    messages.error(request, "You can only delete pending or accepted products.")
+    return redirect('core:index')    
+    
 @login_required
 def index(request):
     products = Product.objects.filter(state=Product.State.ACCEPTED)

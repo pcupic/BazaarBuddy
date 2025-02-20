@@ -1,51 +1,64 @@
-{% load static %}
+{% extends 'core/base.html' %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <link rel="stylesheet" href="{% static 'accounts/profile.css' %}">
-</head>
-<body>
+{% block title %}Profile{% endblock %}
 
-  <div class="dashboard-container">
-    <h1>Profile information</h1>
+{% block content %}
+<div class="container py-4">
+    <h1 class="text-center mb-3">Profile Information</h1>
 
-    <form method="POST">
-      {% csrf_token %}
-      <h3>Edit profile</h3>
-      {{ user_form.as_p }}
-      <button type="submit" name="edit_profile">Save</button>
-    </form>
-
-    <hr>
-
-    <form method="POST">
-      {% csrf_token %}
-      <h3>Change password</h3>
-      {{ password_form.as_p }}
-      <button type="submit" name="change_password">Change</button>
-    </form>
-
-    <hr>
-
-    <form method="POST">
-      {% csrf_token %}
-      <div class="buttons-container">
-        <button type="submit" name="logout" class="delete-btn">Logout</button>
-        <button type="submit" name="delete_profile" class="delete-btn">Delete profile</button>
-      </div>
-    </form>
-
-    <div class="profile-info">
-      <p><strong>Username:</strong> {{ user.username }}</p>
-      <p><strong>Email:</strong> {{ user.email }}</p>
-      <p><strong>First Name:</strong> {{ user.first_name }}</p>
-      <p><strong>Last Name:</strong> {{ user.last_name }}</p>
-      <p><strong>User Type:</strong> {{ user.profile.get_user_type_display }}</p>
+    <div class="card shadow-sm mb-3">
+        <div class="card-body">
+            <h5>Profile Info</h5>
+            <div class="profile-info">
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>First Name:</strong> {{ user.first_name }}</p>
+                <p><strong>Last Name:</strong> {{ user.last_name }}</p>
+                <p><strong>User Type:</strong> {{ user.profile.get_user_type_display }}</p>
+            </div>
+        </div>
     </div>
-  </div>
 
-</body>
-</html>
+    <div class="d-flex mb-3">
+        <div class="card shadow-sm flex-fill me-2">
+            <div class="card-body">
+                <h5>Edit Profile</h5>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group mb-2">
+                        {{ user_form.as_p }}
+                    </div>
+                    <button type="submit" name="edit_profile" class="btn btn-primary btn-sm w-100">Save Changes</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm flex-fill ms-2">
+            <div class="card-body">
+                <h5>Change Password</h5>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group mb-2">
+                        {{ password_form.as_p }}
+                    </div>
+                    <button type="submit" name="change_password" class="btn btn-warning btn-sm w-100">Change Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-body text-center">
+            <div class="d-flex justify-content-center gap-2">
+                <form method="POST" class="w-50">
+                    {% csrf_token %}
+                    <button type="submit" name="logout" class="btn btn-danger btn-sm w-100">Logout</button>
+                </form>
+                <form method="POST" class="w-50">
+                    {% csrf_token %}
+                    <button type="submit" name="delete_profile" class="btn btn-danger btn-sm w-100">Delete Profile</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

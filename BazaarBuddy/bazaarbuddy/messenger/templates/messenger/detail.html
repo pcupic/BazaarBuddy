@@ -1,38 +1,58 @@
-{% load static %}
+{% extends 'core/base.html' %}
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail</title>
-    <link rel="stylesheet" href="{% static 'messenger/detail.css' %}">
-</head>
-<body>
-    <body>
-        <div>
-            <h2>Messages</h2>
-            {% if chat.messages.all %}
-                {% for message in chat.messages.all %}
-                    <div>
-                        <div>
-                            <p><strong>{{ message.created_by.first_name }} {{ message.created_by.last_name }}</strong> @ {{ message.created_at }}</p>
-                            <p>{{ message.content }}</p>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>No messages in this conversation.</p> 
-            {% endif %}
+{% block title %}Message Detail{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="max-width: 800px;">
+    <h2 class="text-center mb-4">Message Details</h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header">
+            <strong>Conversation about {{ chat.product.title }}</strong>
         </div>
-        
+        <div class="card-body">
+            <div class="chat-box" style="max-height: 400px; overflow-y: scroll; padding-right: 10px;">
+                {% if chat.messages.all %}
+                    {% for message in chat.messages.all %}
+                        <div class="message-item d-flex mb-3">
+                            {% if message.created_by != request.user %}
+                                <div class="message-other">
+                                    <p class="mb-0"><strong>{{ message.created_by.first_name }} {{ message.created_by.last_name }}</strong> <span class="text-muted"> @ {{ message.created_at|date:"d M Y, H:i" }}</span></p>
+                                    <div class="bg-light p-3 rounded shadow-sm" style="max-width: 75%;">
+                                        <p class="mb-0">{{ message.content }}</p>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="message-self ms-auto">
+                                    <p class="mb-0 text-end"><strong>You</strong> <span class="text-muted"> @ {{ message.created_at|date:"d M Y, H:i" }}</span></p>
+                                    <div class="bg-primary text-white p-3 rounded shadow-sm" style="max-width: 75%;">
+                                        <p class="mb-0">{{ message.content }}</p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-muted">No messages in this conversation.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="message-form mt-4">
         <form method="post" action=".">
             {% csrf_token %}
-        
-            {{ form.as_p }}
-        
-            <button>Send</button>
+            <div class="d-flex">
+                <div class="flex-grow-1 me-2">
+                    <div class="input-group">
+                        {{ form.as_p }}
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <button type="submit" class="btn btn-primary btn-lg">Send</button>
+                </div>
+            </div>
         </form>
-    </body>
-    
-</body>
-</html>
+    </div>
+</div>
+{% endblock %}

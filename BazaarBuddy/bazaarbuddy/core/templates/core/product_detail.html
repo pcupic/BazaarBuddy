@@ -3,40 +3,47 @@
 {% block title %}Product Details{% endblock %}
 
 {% block content %}
-<div>
-    <h1>{{ product.title }}</h1>
-    <img src="{{ product.image_url }}" style="width: 250px;">
-    <p><strong>Description:</strong> {{ product.description }}</p>
-    <p><strong>Category:</strong> {{ product.category }}</p>
-    <p><strong>Condition:</strong> {{ product.condition }}</p>
-    <p><strong>Grade:</strong> {{ product.grade }}</p>
-    <p><strong>Price:</strong> ${{ product.price }}</p>
-    <p><strong>Created At:</strong> {{ product.date_created }}</p>
-    <p><strong>Updated At:</strong> {{ product.date_updated }}</p>
-    <p><strong>Id:</strong> {{ product.id }}</p>
-    {% if request.user != product.user %}
-        <a href="{% url 'messenger:new_chat' product.id %}">Contact seller</a>
-    {% endif %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="{{ product.image_url }}" class="img-fluid rounded shadow-sm mb-4" alt="{{ product.title }}">
+        </div>
+        <div class="col-md-6">
+            <h1 class="display-4 text-primary">{{ product.title }}</h1>
+            <p class="lead text-muted"><strong>Description:</strong> {{ product.description }}</p>
+            <p><strong>Category:</strong> {{ product.category }}</p>
+            <p><strong>Condition:</strong> {{ product.condition }}</p>
+            <p><strong>Price:</strong> ${{ product.price }}</p>
+            <p><strong>Created At:</strong> {{ product.date_created }}</p>
+            <p><strong>Updated At:</strong> {{ product.date_updated }}</p>
 
-    <p>Average Rating: {{ average_rating|floatformat:2 }} / 5</p>
-    {% if not user_has_rated %}
-    <p>Rate this product:</p>
-    <form method="POST">
-      {% csrf_token %}
-      <div class="rating-numbers">
-        <button type="submit" name="grade" value="1">1</button>
-        <button type="submit" name="grade" value="2">2</button>
-        <button type="submit" name="grade" value="3">3</button>
-        <button type="submit" name="grade" value="4">4</button>
-        <button type="submit" name="grade" value="5">5</button>
-      </div>
-    </form>
-  {% else %}
-        <p>You have already rated this product: {{ user_rating.grade }}</p>
-        <form method="POST" action="{% url 'core:remove_rating' product.id %}">
-            {% csrf_token %}
-            <button type="submit">Remove Rating</button>
-        </form>
-  {% endif %}
+            {% if request.user != product.user %}
+                <a href="{% url 'messenger:new_chat' product.id %}" class="btn btn-primary btn-sm mt-3">Contact Seller</a>
+            {% endif %}
+
+            <hr class="my-4">
+            <p><strong>Average Rating:</strong> {{ average_rating|floatformat:2 }} / 5</p>
+            
+            {% if not user_has_rated %}
+                <p>Rate this product:</p>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        <button type="submit" name="grade" value="1" class="btn btn-outline-secondary">1</button>
+                        <button type="submit" name="grade" value="2" class="btn btn-outline-secondary">2</button>
+                        <button type="submit" name="grade" value="3" class="btn btn-outline-secondary">3</button>
+                        <button type="submit" name="grade" value="4" class="btn btn-outline-secondary">4</button>
+                        <button type="submit" name="grade" value="5" class="btn btn-outline-secondary">5</button>
+                    </div>
+                </form>
+            {% else %}
+                <p>You have already rated this product: <strong>{{ user_rating.grade }}</strong></p>
+                <form method="POST" action="{% url 'core:remove_rating' product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Remove Rating</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}
